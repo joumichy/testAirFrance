@@ -52,14 +52,12 @@ public class UserService implements IUserService {
 
     }
     @Override
-    public Optional<List<User>> findByName(String name) {
-        List<User> users = new ArrayList<>();
-        try{
+    public Optional<List<User>> findByName(String name) throws UserException {
+            List<User> users = new ArrayList<>();
            users  = userRepository.findByName(name);
+           if (users.isEmpty()) throw new UserException("Utilisateur introuvable");
            return Optional.of(users);
-        }catch (Exception e){
-          return Optional.of(users);
-        }
+
     }
 
     @Override
@@ -74,14 +72,12 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Optional<User> findById(Integer id) {
-        Optional<User> user = Optional.empty();
-        try{
-            user  = userRepository.findById(id);
-            return user;
-        }catch (Exception e){
-            return user;
-        }
+    public Optional<User> findById(Integer id) throws UserException{
+        Optional<User> user;
+        user  = userRepository.findById(id);
+        if (!user.isPresent()) throw new UserException("Utilisateur introuvable");
+        return user;
+
     }
 
     @Override

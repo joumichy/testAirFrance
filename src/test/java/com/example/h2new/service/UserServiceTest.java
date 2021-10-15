@@ -42,10 +42,11 @@ class UserServiceTest {
     private  final String ERROR_AGE_MESSAGE = "L'utilisateur n'est pas majeur";
     private  final String ERROR_PHONE_MESSAGE = "Numéro de téléphone invalide";
     private  final String ERROR_GENDER_MESSAGE = "Genre non valide";
+    private  final String ERROR_USERNOTFOUND_MESSAGE = "Utilisateur introuvable";
 
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws UserException {
 
         //GIVEN
       localDateUser = LocalDate.of(1976 ,2,15);
@@ -69,13 +70,18 @@ class UserServiceTest {
     }
 
     @Test
-    void findByName() {
+    void findByName() throws UserException {
+        when(userService.findByName("oiseau")).thenThrow(new UserException(ERROR_USERNOTFOUND_MESSAGE));
+
 
         List<User> newUser = userRepository.findByName(user.getName());
 
         assertNotNull(newUser.get(0));
 
         assertEquals(user, newUser.get(0));
+
+        assertThrows(UserException.class, () -> userService.findByName("oiseau"));
+
     }
 
     @Test
@@ -90,12 +96,18 @@ class UserServiceTest {
     }
 
     @Test
-    void findById() {
+    void findById() throws UserException {
+
+        when(userService.findById(10)).thenThrow(new UserException(ERROR_PHONE_MESSAGE));
+
         Optional<User> newUser = userRepository.findById(user.getId());
 
         assertNotNull(newUser.get());
 
         assertEquals(user, newUser.get());
+
+        assertThrows(UserException.class, () -> userService.findById(10));
+
     }
 
     @Test

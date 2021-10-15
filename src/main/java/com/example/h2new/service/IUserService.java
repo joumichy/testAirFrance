@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IUserService {
-    Optional<List<User>> findByName(String name);
+    Optional<List<User>> findByName(String name) throws UserException;
     Optional<List<User>> findAll();
-    Optional<User> findById(Integer id);
+    Optional<User> findById(Integer id) throws UserException;
     User save(User user) throws UserException;
 }

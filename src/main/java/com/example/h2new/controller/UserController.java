@@ -26,18 +26,25 @@ public class UserController
 
     @GetMapping("/getById/{id}")
     @ResponseBody
-    Optional<User> getUserById(@PathVariable("id")  Integer id){
-        return userService.findById(id);
+    ResponseEntity getUserById(@PathVariable("id")  Integer id){
+
+        try{
+            Optional<User> user = userService.findById(id);
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+
+        }
     }
 
     @GetMapping("/getByName/{name}")
-    ResponseEntity<Optional<List<User>>> getUserByName(@PathVariable(name="name") String name){
+    ResponseEntity getUserByName(@PathVariable(name="name") String name){
 
         try{
             Optional<List<User>> users = userService.findByName(name);
             return new ResponseEntity<>(users, HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 
         }
 
