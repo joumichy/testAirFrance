@@ -19,7 +19,7 @@ public class UserController
     UserService userService;
 
     @GetMapping("/getAll")
-    List<User> getAllUsers(){
+    Optional<List<User>> getAllUsers(){
         return userService.findAll();
     }
 
@@ -31,10 +31,10 @@ public class UserController
     }
 
     @GetMapping("/getByName/{name}")
-    ResponseEntity<List<User>> getUserByName(@PathVariable(name="name") String name){
+    ResponseEntity<Optional<List<User>>> getUserByName(@PathVariable(name="name") String name){
 
         try{
-            List<User> users = userService.findByName(name);
+            Optional<List<User>> users = userService.findByName(name);
             return new ResponseEntity<>(users, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -45,7 +45,7 @@ public class UserController
     }
 
     @PostMapping("/create")
-    ResponseEntity<User> createUserByName(@RequestBody User user){
+    ResponseEntity createUserByName(@RequestBody User user){
 
         try{
 
@@ -54,7 +54,7 @@ public class UserController
 
         }catch (Exception e){
 
-            return new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 
         }
     }
