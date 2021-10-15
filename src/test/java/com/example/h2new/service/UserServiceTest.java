@@ -34,12 +34,15 @@ class UserServiceTest {
     private  static User user2 = null;
     private  static User userPhoneError = null;
     private  static User userAgeError = null;
+    private  static User userBadGender = null;
     private static LocalDate localDateUser= null;
     private static LocalDate localDateUserMinor= null;
     private static List<User> users = new ArrayList<>();
 
     private  final String ERROR_AGE_MESSAGE = "L'utilisateur n'est pas majeur";
     private  final String ERROR_PHONE_MESSAGE = "Numéro de téléphone invalide";
+    private  final String ERROR_GENDER_MESSAGE = "Genre non valide";
+
 
     @BeforeEach
     void setUp() {
@@ -51,6 +54,8 @@ class UserServiceTest {
       user2 = new User("Tom", localDateUser, "Suisse", "0601020304", "Homme");
       userAgeError = new User("Tom", localDateUserMinor, "Suisse", "0601020304", "Homme");
       userPhoneError = new User("Tom", localDateUser, "Suisse", "0101", "Homme");
+      userBadGender = new User("Tom", localDateUser, "Suisse", "0101", "Cacahuete");
+
       users.add(user);
       users.add(user2);
 
@@ -98,6 +103,7 @@ class UserServiceTest {
 
         when(userService.save(userAgeError)).thenThrow(new UserException(ERROR_AGE_MESSAGE));
         when(userService.save(userPhoneError)).thenThrow(new UserException(ERROR_PHONE_MESSAGE));
+        when(userService.save(userBadGender)).thenThrow(new UserException(ERROR_GENDER_MESSAGE));
 
         User newUser = userRepository.save(user);
 
@@ -106,6 +112,7 @@ class UserServiceTest {
 
         assertThrows(UserException.class, () -> userService.save(userAgeError));
         assertThrows(UserException.class, () -> userService.save(userPhoneError));
+        assertThrows(UserException.class, () -> userService.save(userBadGender));
 
 
     }

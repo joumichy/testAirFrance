@@ -15,7 +15,6 @@ import java.util.logging.Logger;
 public class Log {
 
     private final Logger LOGGER = Logger.getLogger(String.valueOf(Log.class));
-    private int order;
 
 
     @Around("userPointCut()")

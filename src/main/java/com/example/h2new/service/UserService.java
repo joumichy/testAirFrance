@@ -41,10 +41,12 @@ public class UserService implements IUserService {
 
         if(majority.minusYears(user.getDateNaissance().getYear()).getYear() <= 18) throw new UserException("L'utilisateur n'est pas majeur");
 
+        if(!user.getGender().equals("Homme") && !user.getGender().equals("Femme") && !user.getGender().isEmpty()) throw new UserException("Genre non valide");
+
         Pattern pattern = Pattern.compile("^\\d{10}$");
         Matcher matcher = pattern.matcher(user.getPhoneNumber());
 
-        if(!matcher.matches()) throw new UserException("Numéro de téléphone non valide");
+        if(!matcher.matches() && !user.getPhoneNumber().isEmpty()) throw new UserException("Numéro de téléphone non valide");
 
 
 
